@@ -1,0 +1,1 @@
+# Example of variables and data types in Python
