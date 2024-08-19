@@ -7,7 +7,24 @@
 Guide with codes and example projects to learn **Python**.
 </div>
 
-## 📚 Basic example
+### 📋 Requirements
+Before running the examples, make sure you have Python3 installed on your system. You can check if Python is installed by running the following command in your terminal or command prompt:
+
+```bash
+python3 --version
+```
+### 💻 Running the Examples
+Run the example you want using the following command:
+
+```bash
+python3 example_name.py
+```
+For example, to run an example called basic_lists.py, use:
+
+```bash
+python3 basic_lists.py
+```
+## 📚 Basic Python Example
 
 ```python
 print('Hello World!')
@@ -21,3 +38,4 @@ print('Hello World!')
 | `05` | Conditional Code | [view](examples/control_structures.py) |
 | `06` | Objects | [view](examples/objects.py) |
 | `07` | User data entry | [view](examples/data_entry.py) |
+
