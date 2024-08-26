@@ -59,4 +59,9 @@ print('Hello World!')
 | --- | --- | --- |
 | `01` | Create and read files | [view](examples/file_management.py) |
 
+## 🔥 Code Challenges
+
+| # | Content | Level | Code
+| --- | --- | --- | --- |
+| `01` | Challenge 1 - CRUD | Basic | [view](projects/) |
 
