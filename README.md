@@ -25,10 +25,13 @@ For example, to run an example called basic_lists.py, use:
 python3 basic_lists.py
 ```
 ## 📚 Basic Python Example
+Hello World in Python:
 
 ```python
 print('Hello World!')
 ```
+**Basic examples**
+
 | # | Content | Code |
 | --- | --- | --- |
 | `01` | Variables and data types | [view](examples/variables.py) |
@@ -38,4 +41,16 @@ print('Hello World!')
 | `05` | Conditional Code | [view](examples/control_structures.py) |
 | `06` | Objects | [view](examples/objects.py) |
 | `07` | User data entry | [view](examples/data_entry.py) |
+
+**POO**
+
+| # | Content | Code |
+| --- | --- | --- |
+| `01` | Classes and Methods | [view](examples/class_and_methods.py) |
+| `02` | Abstraction and Constructors | [view](examples/abstraction_constructors.py) |
+| `03` | Encapsulation | [view](examples/encapsulation.py) |
+| `04` | Getters and Setters | [view](examples/getters_and_setters.py) |
+| `05` | Inheritance | [view](examples/inheritance.py) |
+| `06` | Polymorphism | [view](examples/polymorphism.py) |
+
 
