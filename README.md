@@ -53,4 +53,10 @@ print('Hello World!')
 | `05` | Inheritance | [view](examples/inheritance.py) |
 | `06` | Polymorphism | [view](examples/polymorphism.py) |
 
+**File Management**
+
+| # | Content | Code |
+| --- | --- | --- |
+| `01` | Create and read files | [view](examples/file_management.py) |
+
 
