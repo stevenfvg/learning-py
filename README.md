@@ -63,5 +63,5 @@ print('Hello World!')
 
 | # | Content | Level | Code
 | --- | --- | --- | --- |
-| `01` | Challenge 1 - CRUD | Basic | [view](projects/) |
+| `01` | Challenge 1 - CRUD | Basic | [view](projects/challenge_1/) |
 
