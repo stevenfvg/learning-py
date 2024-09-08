@@ -17,14 +17,17 @@ def main():
             if option == 1:
                 print('\r\nAdd new contact')
                 contact_list.create_contact()
+                show_menu()
             elif option == 2:
                 print('\r\nContact list:')
                 contact_list.show_contacts()
+                show_menu()
             elif option == 3:
-                print('Edit contact...')
-                question = True
+                print('\r\nSearch contact')
+                contact_list.search_contact()
+                show_menu()
             elif option == 4:
-                print('Searching...')
+                print('Edit contact...')
                 question = False
             elif option == 5:
                 print('Delete contact...')
@@ -38,11 +41,11 @@ def main():
             print('\r\nInvalid input, please enter a number')
 
 def show_menu():
-    print('Options menu:')
+    print('\r\nOptions menu:')
     print('1) Add new contact')
     print('2) Show contact list')
-    print('3) Edit contact')
-    print('4) Search contact')
+    print('3) Search contact')
+    print('4) Edit contact')
     print('5) Delete contact')
     print('0) Exit')
 

@@ -63,6 +63,24 @@ class ContactList:
             for index, contact in enumerate(self.contacts, start=1):
                 print(f'{index}. {contact.first_name} {contact.last_name} - Phone: {contact.phone_number}')
     
+    # Method to search for contact
+    def search_contact(self):
+        search_term = input('Enter your search term (first name, last name or phone number): ').strip().lower()
+
+        matching_contacts = [
+            contact for contact in self.contacts
+            if search_term in contact.first_name.lower() or
+                search_term in contact.last_name.lower() or
+                search_term in contact.phone_number
+        ]
+
+        if not matching_contacts:
+            print(f'No contacts were found that match the term: {search_term}')
+        else:
+            print(f"Search results for '{search_term}':")
+            for index, contact in enumerate(matching_contacts,  start=1):
+                print(f'{index}. {contact.first_name} {contact.last_name} - Phone: {contact.phone_number}')
+    
     # Function to validate the first or last name
     def get_valid_name(self, prompt: str, max_length: int = 15) -> str:
         # Requests a name from the user and validates that it only contains letters
