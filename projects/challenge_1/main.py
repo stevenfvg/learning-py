@@ -18,10 +18,10 @@ def main():
                 print('\r\nAdd new contact')
                 contact_list.create_contact()
             elif option == 2:
-                print('Edit contact...')
-                question = False
+                print('\r\nContact list:')
+                contact_list.show_contacts()
             elif option == 3:
-                print('\r\nContact list: \r\n')
+                print('Edit contact...')
                 question = True
             elif option == 4:
                 print('Searching...')
@@ -30,7 +30,7 @@ def main():
                 print('Delete contact...')
                 question = False
             elif option == 0:
-                print('Closing the program...')
+                print('\r\nClosing the program...')
                 break
             else:
                 print('\r\nInvalid option, please try again')
@@ -40,8 +40,8 @@ def main():
 def show_menu():
     print('Options menu:')
     print('1) Add new contact')
-    print('2) Edit contact')
-    print('3) View contacts')
+    print('2) Show contact list')
+    print('3) Edit contact')
     print('4) Search contact')
     print('5) Delete contact')
     print('0) Exit')

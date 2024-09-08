@@ -55,6 +55,14 @@ class ContactList:
 
         print(f'Contact created: {new_contact}')
     
+    # Method to display the contact list
+    def show_contacts(self):
+        if not self.contacts:
+            print('There are no saved contacts.')
+        else:
+            for index, contact in enumerate(self.contacts, start=1):
+                print(f'{index}. {contact.first_name} {contact.last_name} - Phone: {contact.phone_number}')
+    
     # Function to validate the first or last name
     def get_valid_name(self, prompt: str, max_length: int = 15) -> str:
         # Requests a name from the user and validates that it only contains letters
