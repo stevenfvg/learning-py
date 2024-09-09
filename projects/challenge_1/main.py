@@ -3,8 +3,7 @@ from classes.contact_list import ContactList
 def main():
     # Instance of the ContactList class
     contact_list = ContactList()
-    
-    show_menu()
+    show_options_menu()
     
     # Ask the user for the action to perform
     question = True
@@ -12,24 +11,23 @@ def main():
         try:
             option = input('\r\nSelect an option: ')
             option = int(option)
-
             # Execute the options
             if option == 1:
                 print('\r\nAdd new contact')
                 contact_list.create_contact()
-                show_menu()
+                show_options_menu()
             elif option == 2:
                 print('\r\nContact list:')
                 contact_list.show_contacts()
-                show_menu()
+                show_options_menu()
             elif option == 3:
                 print('\r\nSearch contact')
                 contact_list.search_contact()
-                show_menu()
+                show_options_menu()
             elif option == 4:
                 print('\r\nUpdate contact')
                 contact_list.update_contact()
-                show_menu()
+                show_options_menu()
             elif option == 5:
                 print('Delete contact...')
                 question = False
@@ -41,7 +39,7 @@ def main():
         except ValueError:
             print('\r\nInvalid input, please enter a number')
 
-def show_menu():
+def show_options_menu():
     print('\r\nOptions menu:')
     print('1) Add new contact')
     print('2) Show contact list')
