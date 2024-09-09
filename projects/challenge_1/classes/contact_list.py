@@ -9,53 +9,22 @@ class ContactList:
 
     # Method for creating contacts
     def create_contact(self):
-        first_name = self.get_valid_name('Name: ')
-        last_name = self.get_valid_name('Last name: ')
-
-        print("\r\nSelect your mobile operator's prefix:")
-        print('1) 0412')
-        print('2) 0426')
-        print('3) 0414')
-        print('4) 0424')
+        first_name = self.__get_valid_name('Name: ')
+        last_name = self.__get_valid_name('Last name: ')
+        prefix = self.__select_mobile_operator()
         
-        question = True
-        while question:
-            try:
-                option = input('\r\nSelect an option: ')
-                option = int(option)
-
-                if option == 1:
-                    prefix = '412'
-                    question = False
-                elif option == 2:
-                    prefix = '426'
-                    question = False
-                elif option == 3:
-                    prefix = '414'
-                    question = False
-                elif option == 4:
-                    prefix = '424'
-                    question = False
-                else:
-                    print('\r\nInvalid option, please try again')
-            except ValueError:
-                print('\r\nInvalid input, please enter a number')
-
-        phone_number = self.get_valid_phone_number('Phone number: ')
-        # Add country code phone number
-        phone_number = f'+58{prefix}{phone_number}'
-
-        # Validate if the phone number already exists
-        if self.contact_exists(phone_number):
+        phone_number = self.__get_valid_phone_number('Phone number: ')
+        phone_number = f"+58{prefix.lstrip('0')}{phone_number}"
+        
+        if self.__contact_exists(phone_number):
             print(f'Error: The contact with phone number {phone_number} already exists.')
-            return  # Exit without creating the contact
+            return
         
         new_contact = Contact(first_name.capitalize(), last_name.capitalize(), phone_number)
         self.contacts.append(new_contact)
         Storage.save_contacts(self.contacts)
-
         print(f'Contact created: {new_contact}')
-    
+
     # Method to display the contact list
     def show_contacts(self):
         if not self.contacts:
@@ -67,7 +36,6 @@ class ContactList:
     # Method to search for contact
     def search_contact(self):
         search_term = input('Enter your search term (first name, last name or phone number): ').strip().lower()
-
         matching_contacts = [
             contact for contact in self.contacts
             if search_term in contact.first_name.lower() or
@@ -87,121 +55,102 @@ class ContactList:
         if not self.contacts:
             print('The contact list is empty.')
             return
+        
+        selected_contact_index = curses.wrapper(self.__show_contacts_menu)
+        selected_contact = self.contacts[selected_contact_index]
 
-        def show_contacts_menu(stdscr):
-            curses.curs_set(0) # Hide the cursor
-            current_row =  0
+        print(f'You selected: {selected_contact.first_name} {selected_contact.last_name} - {selected_contact.phone_number}')
+        selected_contact.first_name = self.__update_field('name', selected_contact.first_name).capitalize()
+        selected_contact.last_name = self.__update_field('last name', selected_contact.last_name).capitalize()
 
-            while True:
-                stdscr.clear()
-                stdscr.addstr(0, 0, 'Select a contact to update (use arrows and Enter):')
+        if input('Do you want to update your phone number? (y/n): ').lower() == 'y':
+            prefix = self.__select_mobile_operator()
+            phone_number = self.__get_valid_phone_number('Phone number to update: ')
+            selected_contact.phone_number = phone_number = f"+58{prefix.lstrip('0')}{phone_number}"
+        
+        Storage.save_contacts(self.contacts)
+        print('Contact updated successfully.')
 
-                # Show contact list
-                for index, contact in enumerate(self.contacts):
-                    if index == current_row:
-                        stdscr.attron(curses.color_pair(1))
-                        stdscr.addstr(index + 1, 0, f"{contact.first_name} {contact.last_name} - {contact.phone_number}")
-                        stdscr.attroff(curses.color_pair(1))
-                    else:
-                        stdscr.addstr(index + 1, 0, f'{contact.first_name} {contact.last_name} - {contact.phone_number}')
+    # Function to show contact list using curses
+    def __show_contacts_menu(self, stdscr):
+        curses.curs_set(0) # Hide the cursor
+        curses.start_color() # Enable colors
+        # Define green color on black background
+        curses.init_pair(1, curses.COLOR_GREEN, curses.COLOR_BLACK)
 
-                stdscr.refresh()
-                key = stdscr.getch()
+        current_row =  0
 
-                if key == curses.KEY_UP and current_row > 0:
-                    current_row -= 1
-                elif key == curses.KEY_DOWN and current_row < len(self.contacts) - 1:
-                    current_row += 1
-                elif key == curses.KEY_ENTER or key in [10, 13]: 
-                    return current_row
-                
-        # Initialize the curses interface
-        curses.wrapper(show_contacts_menu)
+        while True:
+            stdscr.clear()
+            stdscr.addstr(0, 0, 'Select a contact to update (use arrows and Enter):')
 
-        # Get the index of the selected contact
-        selected_contact_index = curses.wrapper(show_contacts_menu)
-
-        if selected_contact_index is not None:
-            selected_contact = self.contacts[selected_contact_index]
-            print(f'You selected: {selected_contact.first_name} {selected_contact.last_name} - {selected_contact.phone_number}')
-
-            # Data to update the contact
-            update_first_name = input('Do you want to update the name? (y/n): ').lower() == 'y'
-            if update_first_name:
-                selected_contact.first_name = self.get_valid_name('Name to update: ')
+            for index, contact in enumerate(self.contacts):
+                if index == current_row:
+                    stdscr.attron(curses.color_pair(1)) # Highlight selection in green.
+                    stdscr.addstr(index + 1, 0, f'{contact.first_name} {contact.last_name} - {contact.phone_number}')
+                    stdscr.attroff(curses.color_pair(1)) # Turn off the green color when you stop selecting the contact.
+                else:
+                    stdscr.addstr(index + 1, 0, f'{contact.first_name} {contact.last_name} - {contact.phone_number}')
             
-            update_last_name = input('Do you want to update the last name? (y/n): ').lower() == 'y'
-            if update_last_name:
-                selected_contact.last_name = self.get_valid_name('Last name to update: ')
+            stdscr.refresh()
+            key = stdscr.getch()
+
+            if key == curses.KEY_UP and current_row > 0:
+                current_row -= 1
+            elif key == curses.KEY_DOWN and current_row < len(self.contacts) - 1: 
+                current_row += 1
+            elif key in (curses.KEY_ENTER, 10, 13):
+                return current_row
             
-            update_phone_number = input('Do you want to update your phone number? (y/n): ').lower() == 'y'
-            if update_phone_number:
-                print("\r\nSelect your mobile operator's prefix:")
-                print('1) 0412')
-                print('2) 0426')
-                print('3) 0414')
-                print('4) 0424')
-
-                question = True
-                while question:
-                    try:
-                        option = input('\r\nSelect an option: ')
-                        option = int(option)
-
-                        if option == 1:
-                            prefix = '412'
-                            question = False
-                        elif option == 2:
-                            prefix = '426'
-                            question = False
-                        elif option == 3:
-                            prefix = '414'
-                            question = False
-                        elif option == 4:
-                            prefix = '424'
-                            question = False
-                        else:
-                            print('\r\nInvalid option, please try again')
-                    except ValueError:
-                        print('\r\nInvalid input, please enter a number')
-
-                new_phone_number = self.get_valid_phone_number('Phone number to update: ')
-                selected_contact.phone_number = f'+58{prefix}{new_phone_number}'
-
-            # Save changes
-            Storage.save_contacts(self.contacts)
-            print('Contact updated successfully.')
+    # Function to select mobile operator's prefix
+    def __select_mobile_operator(self) -> str:
+        options = {
+            1: '0412',
+            2: '0426',
+            3: '0414',
+            4: '0424'
+        }
+        print("\r\nSelect your mobile operator's prefix:")
+        for option, prefix in options.items():
+            print(f'{option}) {prefix}')
+        
+        while True:
+            try:
+                option = int(input('\r\nSelect an option: '))
+                if option in options:
+                    return options[option]
+                else:
+                    print('Invalid option, please try again.')
+            except ValueError:
+                print('Invalid input, please enter a number.')
     
+    # Function to update a field
+    def __update_field(self, field_name: str, current_value: str) -> str:
+        if input(f'Do you want to update the {field_name}? (y/n): ').lower() == 'y':
+            return self.__get_valid_name(f'{field_name} to update: ')
+        return current_value
+
     # Function to validate the first or last name
-    def get_valid_name(self, prompt: str, max_length: int = 15) -> str:
-        # Requests a name from the user and validates that it only contains letters
+    def __get_valid_name(self, prompt: str, max_length: int = 15) -> str:
         while True:
             name = input(prompt)
-            # Validate name length
             if len(name) > max_length:
                 print(f'The name must not exceed {max_length} characters. Please try again.')
                 continue
             # Validate that the name only contains letters and spaces
             if re.match(r"^[A-Za-zÀ-ÿ]+$", name):
                 return name
-            else:
-                print('Error: The name must only contain letters. Please try again.')
+            print('Error: The name must only contain letters. Please try again.')
 
     # Function to validate the phone number
-    def get_valid_phone_number(self, prompt: str) -> str:
+    def __get_valid_phone_number(self, prompt: str) -> str:
         # Request a phone number and validate that it only contains numbers and is 7 characters long
         while True:
             number = input(prompt)
             if re.match(r"^\d{7}$", number):
                 return number
-            else:
-                print('Error: The phone number is invalid')
+            print('Error: The phone number is invalid')
     
-    # Function to validate if the contact already exists
-    def contact_exists(self, phone_number: str) -> bool:
-        # Check if there is already a contact with the same phone number
-        for contact in self.contacts:
-            if contact.phone_number == phone_number:
-                return True
-        return False
-    
+    # Function to check if contact already exists
+    def __contact_exists(self, phone_number: str) -> bool:
+        return any(contact.phone_number == phone_number for contact in self.contacts)
