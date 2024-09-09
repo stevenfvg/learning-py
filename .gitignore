@@ -176,3 +176,6 @@ pyrightconfig.json
 # VScode
 .vscode/*
 
+# Ignore changes in contacts.json file
+projects/challenge_1/data/contacts.json
+
