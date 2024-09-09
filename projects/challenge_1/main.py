@@ -27,8 +27,9 @@ def main():
                 contact_list.search_contact()
                 show_menu()
             elif option == 4:
-                print('Edit contact...')
-                question = False
+                print('\r\nUpdate contact')
+                contact_list.update_contact()
+                show_menu()
             elif option == 5:
                 print('Delete contact...')
                 question = False
@@ -45,7 +46,7 @@ def show_menu():
     print('1) Add new contact')
     print('2) Show contact list')
     print('3) Search contact')
-    print('4) Edit contact')
+    print('4) Update contact')
     print('5) Delete contact')
     print('0) Exit')
 
