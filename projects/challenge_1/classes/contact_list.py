@@ -70,6 +70,29 @@ class ContactList:
         
         Storage.save_contacts(self.contacts)
         print('Contact updated successfully.')
+    
+    # Method to delete contact
+    def delete_contact(self):
+        if not self.contacts:
+            print('The contact list is empty.')
+            return
+        
+        selected_contac_index = curses.wrapper(self.__show_contacts_menu)
+        selected_contact = self.contacts[selected_contac_index]
+
+        print(f'You selected: {selected_contact.first_name} {selected_contact.last_name} - {selected_contact.phone_number}')
+        # Ask the user if they want to confirm the deletion of the contact
+        confirmation = input(f'Are you sure you want to delete {selected_contact.first_name} {selected_contact.last_name}? (y/n): ').lower()
+
+        if confirmation == 'y':
+            # Remove contact from list
+            del self.contacts[selected_contac_index]
+            # Save changes to storage
+            Storage.save_contacts(self.contacts)
+            print('Contact deleted: {selected_contact.first_name} {selected_contact.last_name}')
+        else:
+            print('Deletion cancelled.')
+
 
     # Function to show contact list using curses
     def __show_contacts_menu(self, stdscr):
@@ -82,7 +105,7 @@ class ContactList:
 
         while True:
             stdscr.clear()
-            stdscr.addstr(0, 0, 'Select a contact to update (use arrows and Enter):')
+            stdscr.addstr(0, 0, 'Select a contact (use arrows and Enter):')
 
             for index, contact in enumerate(self.contacts):
                 if index == current_row:

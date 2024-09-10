@@ -29,8 +29,9 @@ def main():
                 contact_list.update_contact()
                 show_options_menu()
             elif option == 5:
-                print('Delete contact...')
-                question = False
+                print('\r\nDelete contact')
+                contact_list.delete_contact()
+                show_options_menu()
             elif option == 0:
                 print('\r\nClosing the program...')
                 break
